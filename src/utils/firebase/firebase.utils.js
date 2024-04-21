@@ -1,12 +1,7 @@
 import { initializeApp } from "firebase/app";
 
 // Firebase Authentication Library
-import {
-  getAuth,
-  signInWithRedirect,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // Firestore Database Library
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -28,12 +23,11 @@ googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
-// Auth
+// Authentication - Providers give us multiple ways to sign in
 export const auth = getAuth();
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
-
-// Database
+// Database - get and set data into the database
 export const database = getFirestore();
 
 // Create User: database, users collection(folder), uid
