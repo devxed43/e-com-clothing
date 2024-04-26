@@ -12,7 +12,16 @@ import {
 } from "firebase/auth";
 
 // Firestore Database Library
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD577yo1FG7AkykvVhBl0P3fl3u6PkIay8",
@@ -39,6 +48,37 @@ export const signInWithGooglePopup = () =>
 
 // Database - get and set data into the database
 export const database = getFirestore();
+
+// objectsToAdd are the objects in the array of categories
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = collection(database, collectionKey);
+  const batch = writeBatch(database);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(database, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
 
 // Create User: database, users collection(folder), uid
 export const createUserDocumentFromAuth = async (

@@ -21,6 +21,7 @@
   }
   .quantity {
     display: flex;
+    justify-content: space-between;
     .arrow {
       cursor: pointer;
     }
