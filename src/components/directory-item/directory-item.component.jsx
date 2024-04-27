@@ -1,20 +1,34 @@
-import "./directory-item.styles.scss";
+// Navigate Import
+import { useNavigate } from "react-router-dom";
 
+// Styles
+import {
+  BackgroundImage,
+  Body,
+  DirectoryItemContainer,
+} from "./directory-item.styles.jsx";
+
+// Component
 const DirectoryItem = ({ category }) => {
-  const { imageUrl, title } = category;
+  // Directory Item Component recieves Category [] from parent Directory Component.
+  // Destructures off imageUrl, title, route
+  const { imageUrl, title, route } = category;
+
+  // Navigate
+  const navigate = useNavigate();
+
+  // Event Handler
+  const onNavigateHandler = () => navigate(route);
+
   return (
-    <div className="directory-item-container">
-      <div
-        className="background-image"
-        style={{
-          backgroundImage: `url(${imageUrl})`,
-        }}
-      />
-      <div className="directory-item-body-container">
-        <h1>{title}</h1>
+    // Directory Item Container holds Background Image, the title, and shop now in the card
+    <DirectoryItemContainer onClick={onNavigateHandler}>
+      <BackgroundImage imageUrl={imageUrl} />
+      <Body>
+        <h2>{title}</h2>
         <p>shop now</p>
-      </div>
-    </div>
+      </Body>
+    </DirectoryItemContainer>
   );
 };
 
